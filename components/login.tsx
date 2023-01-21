@@ -1,44 +1,73 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Magic } from '@magic-sdk/react-native-expo';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { API_KEY } from '@env';
+import { styles } from '../style';
+import Toast from 'react-native-root-toast';
+import { magic } from '../App';
 
-console.log("api key", API_KEY)
-const m = new Magic(API_KEY); // ✨
-
-export default function Login() {
+export default function Login({ navigation }): JSX.Element {
     const [email, setEmail] = useState("");
+
+    useEffect(() => {
+        redirectOnLoggin();
+    }, []);
+
+    const redirectOnLoggin = async () => {
+        let logged = await magic.user.isLoggedIn();
+        if (logged) {
+            navigation.navigate('Wallet');
+        }
+    }
+
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
     const onPressLearnMore = async () => {
         if (email) {
-            await m.auth.loginWithEmailOTP({ email });
+            if (reg.test(email) === true) {
+                try {
+
+                    let result = await magic.auth.loginWithEmailOTP({ email });
+                    if (result) {
+                        navigation.navigate('Wallet', { result })
+                    }
+                } catch (error) {
+                    Toast.show(error, {
+                        duration: Toast.durations.SHORT,
+                    });
+                }
+            }
+            else {
+                Toast.show('Incorrect email format.', {
+                    duration: Toast.durations.SHORT,
+                });
+            }
+        } else {
+            let toast = Toast.show('Write your email first.', {
+                duration: Toast.durations.SHORT,
+            });
+
         }
     };
     return (
 
         <View style={styles.container}>
-            <Text>Please sign up or login</Text>
+            <Text style={styles.title}>Please login with your email</Text>
             <TextInput
+                autoComplete='email'
+                placeholder='email'
+                keyboardType='email-address'
                 style={styles.input}
-                onChangeText={(text) => setEmail(text)}
+                onChangeText={(text: React.SetStateAction<string>) => setEmail(text)}
                 value={email}
             />
-            <Button title="Login" onPress={onPressLearnMore}></Button>
+            <Pressable style={styles.button} onPress={onPressLearnMore}>
+                <Text style={styles.buttonText}>Login</Text>
+            </Pressable>
+            
+          <StatusBar style="light" />
         </View>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }, input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        width: 200
-    },
-});
