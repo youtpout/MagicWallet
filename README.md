@@ -11,6 +11,7 @@ API_KEY=pk_live_********
 
 Install and launch, in the terminal
 ```
-npm i
+yarn install
+yarn add expo
 npx start expo
 ```
