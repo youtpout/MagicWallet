@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, Linking, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Magic } from '@magic-sdk/react-native-expo';
 import React, { useCallback, useEffect, useState } from 'react';
 import { API_KEY } from '@env';
@@ -41,6 +41,11 @@ export default function Wallet({ navigation }): JSX.Element {
         }
     };
 
+    const openScan = async () => {
+        let url = 'https://mumbai.polygonscan.com/address/' + address;
+        await Linking.openURL(url);
+    }
+
     const closeReceive = useCallback(() => {
         setShowReceive(false);
     }, [])
@@ -71,7 +76,9 @@ export default function Wallet({ navigation }): JSX.Element {
                     <Text style={styles.title}>Polygon Testnet Mumbai</Text>
                     <VStack style={{ alignItems: 'center' }}>
                         <Text style={styles.subtitle}>Wallet</Text>
-                        <Text>{address}</Text>
+                        <Pressable onPress={openScan}>
+                            <Text style={{ fontSize: 15, color: '#2196F3' }}>{address}</Text>
+                        </Pressable>
                     </VStack>
                     <VStack style={{ alignItems: 'center' }}>
                         <Text style={styles.subtitle}>Balance</Text>
