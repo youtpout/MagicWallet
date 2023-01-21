@@ -11,6 +11,10 @@ const styles = StyleSheet.create({
         fontSize: 22,
         marginBottom: 30
     },
+    subtitle: {
+        fontSize: 18,
+        marginTop: 15
+    },
     button: {
         backgroundColor: 'black',
         color: 'white',
@@ -38,7 +42,19 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: 'black',
         color: 'white'
+    },
+    iconButton: {
+        borderColor: 'black',
+        borderWidth: 1,
+        alignContent: 'center',
+        alignItems: 'center',
+        padding: 5
+    },
+    balance: {
+        color: 'green',
+        fontSize: 30
     }
+
 });
 
 export { styles }

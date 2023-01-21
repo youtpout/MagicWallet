@@ -5,21 +5,10 @@ import React, { useEffect, useState } from 'react';
 import { API_KEY } from '@env';
 import { styles } from '../style';
 import Toast from 'react-native-root-toast';
-import { magic } from '../App';
+import { magic } from '../magic';
 
 export default function Login({ navigation }): JSX.Element {
     const [email, setEmail] = useState("");
-
-    useEffect(() => {
-        redirectOnLoggin();
-    }, []);
-
-    const redirectOnLoggin = async () => {
-        let logged = await magic.user.isLoggedIn();
-        if (logged) {
-            navigation.navigate('Wallet');
-        }
-    }
 
     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -30,7 +19,7 @@ export default function Login({ navigation }): JSX.Element {
 
                     let result = await magic.auth.loginWithEmailOTP({ email });
                     if (result) {
-                        navigation.navigate('Wallet', { result })
+                        navigation.navigate('Wallet', { result });
                     }
                 } catch (error) {
                     Toast.show(error, {
@@ -65,8 +54,8 @@ export default function Login({ navigation }): JSX.Element {
             <Pressable style={styles.button} onPress={onPressLearnMore}>
                 <Text style={styles.buttonText}>Login</Text>
             </Pressable>
-            
-          <StatusBar style="light" />
+
+            <StatusBar style="light" />
         </View>
     );
 }
