@@ -3,9 +3,9 @@ import { ActivityIndicator, Button, Pressable, StyleSheet, Text, TextInput, View
 import { Magic } from '@magic-sdk/react-native-expo';
 import React, { useEffect, useState } from 'react';
 import { API_KEY } from '@env';
-import { styles } from '../style';
+import { styles } from '../../style';
 import Toast from 'react-native-root-toast';
-import { magic } from '../magic';
+import { magic } from '../../magic';
 import { Stack } from '@react-native-material/core';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 

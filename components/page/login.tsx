@@ -3,9 +3,9 @@ import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-nati
 import { Magic } from '@magic-sdk/react-native-expo';
 import React, { useEffect, useState } from 'react';
 import { API_KEY } from '@env';
-import { styles } from '../style';
+import { styles } from '../../style';
 import Toast from 'react-native-root-toast';
-import { magic } from '../magic';
+import { magic } from '../../magic';
 
 export default function Login({ navigation }): JSX.Element {
     const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ export default function Login({ navigation }): JSX.Element {
                         navigation.navigate('Wallet', { result });
                     }
                 } catch (error) {
-                    Toast.show(error, {
+                    Toast.show('' + error, {
                         duration: Toast.durations.SHORT,
                     });
                 }

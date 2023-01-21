@@ -1,14 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import Login from './components/login';
+import Login from './components/page/login';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootSiblingParent } from 'react-native-root-siblings';
-import Wallet from './components/wallet';
+import Wallet from './components/page/wallet';
 import { styles } from './style';
-import Home from './components/home';
+import Home from './components/page/home';
 import { magic } from './magic';
 
 const Stack = createNativeStackNavigator();

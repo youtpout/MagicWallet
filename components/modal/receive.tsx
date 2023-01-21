@@ -2,9 +2,9 @@
 import React from 'react';
 import { Share, Text, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { IconButton, VStack } from '@react-native-material/core';
+import { HStack, IconButton, VStack } from '@react-native-material/core';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { styles } from '../style';
+import { styles } from '../../style';
 import * as Clipboard from 'expo-clipboard';
 import Toast from 'react-native-root-toast';
 
@@ -24,7 +24,13 @@ export default function Receive({ address, close }): JSX.Element {
 
     return (
         <View style={{ position: 'absolute', bottom: 0, height: '50%', backgroundColor: '#eeeeee', width: '100%' }}>
-            <IconButton onPress={() => close()} icon={props => <Icon name="close" {...props} />} />
+            <HStack style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ paddingLeft: 50, flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+                    <Text style={{ fontSize: 22 }}>Receive</Text>
+                </View>
+                <IconButton onPress={() => close()} icon={props => <Icon name="close" {...props} />} />
+            </HStack>
+
 
 
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>

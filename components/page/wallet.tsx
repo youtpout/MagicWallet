@@ -3,16 +3,18 @@ import { Button, Linking, Pressable, StyleSheet, Text, TextInput, View } from 'r
 import { Magic } from '@magic-sdk/react-native-expo';
 import React, { useCallback, useEffect, useState } from 'react';
 import { API_KEY } from '@env';
-import { styles } from '../style';
+import { styles } from '../../style';
 import Toast from 'react-native-root-toast';
-import { magic } from '../magic';
+import { magic } from '../../magic';
 import "react-native-get-random-values";
 import "@ethersproject/shims";
 // Import the ethers library
 import { ethers } from "ethers";
 import { Stack, IconButton, VStack, HStack } from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import Receive from './receive';
+import Receive from '../modal/receive';
+import Send from '../modal/send';
+import Swap from '../modal/swap';
 
 export default function Wallet({ navigation }): JSX.Element {
     const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
@@ -35,7 +37,12 @@ export default function Wallet({ navigation }): JSX.Element {
             const amount = ethers.utils.formatEther(
                 await provider.getBalance(publicAddress), // Balance is in wei
             );
-            setBalance(amount);
+            let pos = amount.indexOf('.');
+            if (pos + 4 < amount.length) {
+                setBalance(amount.substring(0, pos + 5));
+            } else {
+                setBalance(amount);
+            }
         } catch {
             // Handle errors if required!
         }
@@ -54,7 +61,7 @@ export default function Wallet({ navigation }): JSX.Element {
         setShowSend(false);
     }, [])
 
-    const closeShowSwap = useCallback(() => {
+    const closeSwap = useCallback(() => {
         setShowSwap(false);
     }, [])
 
@@ -87,7 +94,7 @@ export default function Wallet({ navigation }): JSX.Element {
                 </VStack>
                 <View style={{ width: '100%', marginBottom: 30, marginTop: 30, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                     <VStack style={{ alignItems: 'center' }}>
-                        <IconButton style={styles.iconButton} icon={props => <Icon name="send" {...props} />} />
+                        <IconButton style={styles.iconButton} onPress={() => setShowSend(true)} icon={props => <Icon name="send" {...props} />} />
                         <Text>Send</Text>
                     </VStack>
                     <VStack style={{ alignItems: 'center' }} >
@@ -95,7 +102,7 @@ export default function Wallet({ navigation }): JSX.Element {
                         <Text>Refresh</Text>
                     </VStack>
                     <VStack style={{ alignItems: 'center' }}>
-                        <IconButton style={styles.iconButton} icon={props => <Icon name="swap-vertical" {...props} />} />
+                        <IconButton style={styles.iconButton} onPress={() => setShowSwap(true)} icon={props => <Icon name="swap-vertical" {...props} />} />
                         <Text>Swap</Text>
                     </VStack>
                     <VStack style={{ alignItems: 'center' }}>
@@ -112,6 +119,8 @@ export default function Wallet({ navigation }): JSX.Element {
                 <StatusBar style="light" />
             </View>
             {showReceive && <Receive address={address} close={closeReceive}></Receive>}
+            {showSend && <Send address={address} close={closeSend}></Send>}
+            {showSwap && <Swap address={address} close={closeSwap}></Swap>}
         </View>
     );
 }
