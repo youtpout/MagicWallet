@@ -1,6 +1,10 @@
 ## Welcome on Magic Wallet
 A proof of concept of react native app wallet with magic auth integration
 
+On polygon mumbai (testnet) network
+
+You can send Matic, receive Matic and swap Matic to Dai
+
 ## Launch the app
 This app use expo
 
