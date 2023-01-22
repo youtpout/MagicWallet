@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 32,
+        marginBottom: 10
 
     },
     buttonDisabled: {
@@ -36,6 +37,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 32,
+        marginBottom: 10
 
     },
     buttonText: {
@@ -79,6 +81,13 @@ const styles = StyleSheet.create({
     balance: {
         color: 'green',
         fontSize: 30
+    },
+    modalView: {
+        position: 'absolute',
+        bottom: 0,
+        height: '70%',
+        backgroundColor: '#eeeeee',
+        width: '100%'
     }
 
 });

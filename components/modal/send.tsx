@@ -35,17 +35,17 @@ export default function Send({ address, close }): JSX.Element {
                 let result = await signer.sendTransaction(tx);
 
                 Toast.show('Transaction sent ' + result.hash, {
-                    duration: Toast.durations.SHORT, position: Toast.positions.CENTER
+                    duration: Toast.durations.SHORT, position: 50
                 });
             } else {
                 Toast.show('Incorrect data for the transaction', {
-                    duration: Toast.durations.SHORT, position: Toast.positions.CENTER
+                    duration: Toast.durations.SHORT, position: 50
                 });
             }
 
         } catch (error) {
             Toast.show('' + error, {
-                duration: Toast.durations.SHORT, position: Toast.positions.CENTER
+                duration: Toast.durations.SHORT, position: 50
             });
         }
         finally {
@@ -57,7 +57,7 @@ export default function Send({ address, close }): JSX.Element {
     return (
         <Modal animationType="slide" onRequestClose={close} transparent={true}>
             <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
-                <View style={{ position: 'absolute', bottom: 0, height: '80%', backgroundColor: '#eeeeee', width: '100%' }}>
+                <View style={styles.modalView}>
                     <HStack style={{ alignItems: 'center', justifyContent: 'center' }}>
                         <View style={{ paddingLeft: 50, flex: 1, alignItems: 'center', justifyContent: 'center', }}>
                             <Text style={{ fontSize: 22 }}>Send</Text>

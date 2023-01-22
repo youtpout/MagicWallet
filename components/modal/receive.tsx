@@ -24,8 +24,8 @@ export default function Receive({ address, close }): JSX.Element {
 
     return (
         <Modal animationType="slide" onRequestClose={close} transparent={true}>
-            <View style={{ position: 'absolute', bottom: 0, height: '50%', backgroundColor: '#eeeeee', width: '100%' }}>
-                <HStack style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={styles.modalView}>
+                <HStack style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 50 }}>
                     <View style={{ paddingLeft: 50, flex: 1, alignItems: 'center', justifyContent: 'center', }}>
                         <Text style={{ fontSize: 22 }}>Receive</Text>
                     </View>
