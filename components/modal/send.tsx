@@ -20,15 +20,6 @@ export default function Send({ address, close }): JSX.Element {
     const [gasPrice, setGasPrice] = useState("0");
     const [disableSend, setDisableSend] = useState(false);
 
-    useEffect(() => {
-        getGasPrice();
-    }, [])
-
-    const getGasPrice = async () => {
-        let price = await provider.getGasPrice();
-        setGasPrice(price.toString());
-    }
-
     const send = async () => {
         setDisableSend(true);
         try {
@@ -38,9 +29,7 @@ export default function Send({ address, close }): JSX.Element {
                 const tx = {
                     from: address,
                     to: to,
-                    value: ethers.utils.parseEther(amount),
-                    gasLimit: ethers.utils.hexlify(100000), // 100000
-                    gasPrice: gasPrice,
+                    value: ethers.utils.parseEther(amount)
                 }
 
                 let result = await signer.sendTransaction(tx);
@@ -89,7 +78,6 @@ export default function Send({ address, close }): JSX.Element {
                     onChangeText={(text: React.SetStateAction<string>) => setAmount(text?.replace(',', '.'))}
                     value={amount}
                 />
-                <Text style={styles.subtitle}>Gas price {gasPrice} wei</Text>
 
                 <Pressable style={disableSend ? styles.buttonDisabled : styles.button} disabled={disableSend} onPress={send}>
                     <Text style={styles.buttonText}>Send</Text>

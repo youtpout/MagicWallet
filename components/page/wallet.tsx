@@ -30,19 +30,37 @@ export default function Wallet({ navigation }): JSX.Element {
         getData();
     }, []);
 
+    useEffect(() => {
+        // get balance of the current wallet at each new block
+        provider.on('block', getNewBlock);
+        return function cleanup() {
+            provider.removeListener('block', getNewBlock);
+        };
+    }, [address]);
+
+    const getNewBlock = async (blockNumber: any) => {
+        await getBalance(address);
+    };
+
+    const getBalance = async (userAddress: string) => {
+        if (userAddress) {
+            const amountWei= await provider.getBalance(userAddress);
+            const amountEth = ethers.utils.formatEther(amountWei);
+            let pos = amountEth.indexOf('.');
+            if (pos + 4 < amountEth.length) {
+                setBalance(amountEth.substring(0, pos + 5));
+            } else {
+                setBalance(amountEth);
+            }
+        }
+    }
+
     const getData = async () => {
         try {
+            // get current user connected from magic sdk
             const { email, publicAddress } = await magic.user.getMetadata();
-            setAddress(publicAddress);
-            const amount = ethers.utils.formatEther(
-                await provider.getBalance(publicAddress), // Balance is in wei
-            );
-            let pos = amount.indexOf('.');
-            if (pos + 4 < amount.length) {
-                setBalance(amount.substring(0, pos + 5));
-            } else {
-                setBalance(amount);
-            }
+            setAddress(publicAddress!);
+            await getBalance(address);
         } catch {
             // Handle errors if required!
         }
@@ -96,10 +114,6 @@ export default function Wallet({ navigation }): JSX.Element {
                     <VStack style={{ alignItems: 'center' }}>
                         <IconButton style={styles.iconButton} onPress={() => setShowSend(true)} icon={props => <Icon name="send" {...props} />} />
                         <Text>Send</Text>
-                    </VStack>
-                    <VStack style={{ alignItems: 'center' }} >
-                        <IconButton style={styles.iconButton} onPress={getData} icon={props => <Icon name="refresh" {...props} />} />
-                        <Text>Refresh</Text>
                     </VStack>
                     <VStack style={{ alignItems: 'center' }}>
                         <IconButton style={styles.iconButton} onPress={() => setShowSwap(true)} icon={props => <Icon name="swap-vertical" {...props} />} />
