@@ -60,6 +60,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 5
     },
+    inputLabel: {
+        margin: 12,
+        width: '80%',
+        borderRadius: 5
+    },
     header: {
         backgroundColor: 'black',
         color: 'white'
