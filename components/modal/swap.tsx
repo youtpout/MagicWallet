@@ -25,13 +25,13 @@ export default function Swap({ address, close }): JSX.Element {
     const [inversed, setInversed] = useState(false);
 
     const routerV2Address = "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506";
-    const wethAddress = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa";
-    let wMaticAddress = "0x9c3c9283d3e44854697cd22d3faa240cfb032889";
+    const daiAddress = "0xcB1e72786A6eb3b44C2a2429e317c8a2462CFeb1";
+    const wMaticAddress = "0x5B67676a984807a212b1c59eBFc9B3568a474F0a";
     const principalName = 'Matic';
-    const erc20Name = 'Weth';
+    const erc20Name = 'Dai';
     const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
     const signer = provider.getSigner();
-    const erc20 = new ethers.Contract(wethAddress, erc20Abi, signer) as IERC20;
+    const erc20 = new ethers.Contract(daiAddress, erc20Abi, signer) as IERC20;
     const router = new ethers.Contract(routerV2Address, routerAbi, signer) as UniswapV2Router02;
 
 
@@ -51,11 +51,11 @@ export default function Swap({ address, close }): JSX.Element {
         let result = [];
         if (!from.isZero()) {
             if (inversed) {
-                result = await router.getAmountsOut(from, [wethAddress, wMaticAddress]);
+                result = await router.getAmountsOut(from, [daiAddress, wMaticAddress]);
 
             } else {
                 console.log("amount ", from);
-                result = await router.getAmountsOut(from, [wMaticAddress, wethAddress]);
+                result = await router.getAmountsOut(from, [wMaticAddress, daiAddress]);
             }
             let out = result[result.length - 1];
             out = out.sub(out.div(ethers.BigNumber.from(10)));
@@ -68,15 +68,10 @@ export default function Swap({ address, close }): JSX.Element {
 
     useEffect(() => {
         // get allowance result
-        const erc20 = new ethers.Contract(wethAddress, erc20Abi, signer) as IERC20;
-        let filter = erc20.filters.Approval(address, wethAddress, null);
+        const erc20 = new ethers.Contract(daiAddress, erc20Abi, signer) as IERC20;
+        let filter = erc20.filters.Approval(address, daiAddress, null);
         provider.on(filter, (log, event: ApprovalEvent) => {
             getAllowance();
-        });
-
-        router.WETH().then((add) => {
-            wMaticAddress = add;
-            console.log("wmatic", wMaticAddress);
         });
     }, []);
 
@@ -99,13 +94,13 @@ export default function Swap({ address, close }): JSX.Element {
             if (!from.isZero()) {
                 const deadLine = ethers.BigNumber.from("9999999999999999");
                 if (inversed) {
-                    let result = await router.swapExactTokensForETH(from, to, [wethAddress, wMaticAddress], address, deadLine);
+                    let result = await router.swapExactTokensForETH(from, to, [daiAddress, wMaticAddress], address, deadLine);
 
                     Toast.show('Transaction sent ' + result.hash, {
                         duration: Toast.durations.SHORT, position: 50
                     });
                 } else {
-                    let result = await router.swapExactETHForTokens(to, [wMaticAddress, wethAddress], address, deadLine, { value: from });
+                    let result = await router.swapExactETHForTokens(to, [wMaticAddress, daiAddress], address, deadLine, { value: from });
 
                     Toast.show('Transaction sent ' + result.hash, {
                         duration: Toast.durations.SHORT, position: 50
