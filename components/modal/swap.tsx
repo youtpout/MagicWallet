@@ -9,8 +9,8 @@ import * as Clipboard from 'expo-clipboard';
 import Toast from 'react-native-root-toast';
 import { ethers } from 'ethers';
 import { magic } from '../../magic';
-import routerAbi from '../..//models/routerv2-abi.json';
-import erc20Abi from '../..//models/erc20-abi.json';
+import routerAbi from '../../models/routerv2-abi.json';
+import erc20Abi from '../../models/erc20-abi.json';
 import { UniswapV2Router02 } from '../../models/@uniswap/v2-periphery/contracts';
 import { IERC20 } from '../../models/@uniswap/v2-periphery/contracts/interfaces';
 import { TextInput } from "@react-native-material/core";
@@ -24,6 +24,7 @@ export default function Swap({ address, close }): JSX.Element {
     const [disableSwap, setDisableSwap] = useState(false);
     const [inversed, setInversed] = useState(false);
 
+    // sushiswap router
     const routerV2Address = "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506";
     const daiAddress = "0xcB1e72786A6eb3b44C2a2429e317c8a2462CFeb1";
     const wMaticAddress = "0x5B67676a984807a212b1c59eBFc9B3568a474F0a";
@@ -36,6 +37,7 @@ export default function Swap({ address, close }): JSX.Element {
 
 
     const getAllowance = async () => {
+        // get allowance when we trade dai to matic
         const allowance = await erc20.allowance(address, routerV2Address);
         console.log("allowance", allowance);
         const decimal = await erc20.decimals();
@@ -47,6 +49,7 @@ export default function Swap({ address, close }): JSX.Element {
     };
 
     const getAmountOut = async () => {
+        // get how many token will we have with 10% slippage tolerance
         const from = ethers.utils.parseEther(amountFrom);
         let result = [];
         if (!from.isZero()) {
@@ -131,13 +134,10 @@ export default function Swap({ address, close }): JSX.Element {
     const approve = async () => {
         setDisableAllow(true);
         try {
-            Toast.show('Weth will be approve to uniswap router', {
-                duration: Toast.durations.SHORT, position: 50
-            });
             const approveAmount = ethers.utils.parseEther("100000");
 
             let result = await erc20.approve(routerV2Address, approveAmount);
-            Toast.show('Weth approved transaction ' + result.hash, {
+            Toast.show(erc20Name + ' approved transaction ' + result.hash, {
                 duration: Toast.durations.SHORT, position: 50
             });
 
@@ -187,10 +187,10 @@ export default function Swap({ address, close }): JSX.Element {
                             label={inversed ? principalName : erc20Name}
                         />
 
-                        <Pressable style={disableAllow || isAllow ? styles.buttonDisabled : styles.button} disabled={disableSwap} onPress={approve}>
+                        <Pressable style={disableAllow || isAllow ? styles.buttonDisabled : styles.button} disabled={disableAllow || isAllow} onPress={approve}>
                             <Text style={styles.buttonText}>Approve</Text>
                         </Pressable>
-                        <Pressable style={disableSwap || !isAllow ? styles.buttonDisabled : styles.button} disabled={disableSwap} onPress={swap}>
+                        <Pressable style={disableSwap || !isAllow ? styles.buttonDisabled : styles.button} disabled={disableSwap || !isAllow } onPress={swap}>
                             <Text style={styles.buttonText}>Swap</Text>
                         </Pressable>
                     </View>

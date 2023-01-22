@@ -82,10 +82,14 @@ const styles = StyleSheet.create({
         color: 'green',
         fontSize: 30
     },
+    balanceDai: {
+        color: 'orange',
+        fontSize: 26
+    },
     modalView: {
         position: 'absolute',
         bottom: 0,
-        height: '70%',
+        height: '50%',
         backgroundColor: '#eeeeee',
         width: '100%'
     }
